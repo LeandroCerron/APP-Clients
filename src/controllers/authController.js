@@ -5,6 +5,7 @@ import Role from '../models/Roles';
 
 exports.singup = async (req, res, next) => {
     const {name, email, password, roles} = req.body;
+
     //Generate new user with encrypted password
     const user = new User({
         name, 
@@ -28,7 +29,7 @@ exports.singup = async (req, res, next) => {
         });
         res.json({token});   
     } catch (error) {
-        console.log(error);        
+        console.log(error);
     }
 }
 
@@ -44,6 +45,5 @@ exports.login = async (req, res, next) => {
     //if 'matchPassword' is true, generate and send the 'token'
     const token = jwt.sign({id: userFound._id}, config.SECRET, {expiresIn: 86400});
 
-    console.log(userFound);
     res.json({token});
 }

@@ -6,8 +6,8 @@ import Role from '../models/Roles';
 exports.verifyToken = async (req, res, next) => {
     
     try {
-        const token = req.headers["x-access-token"];
-
+        const token = req.headers["authorization"];//x-access-token
+        
         if(!token) return res.json({message: "No token provided"});
         
         const decoded = jwt.verify(token, config.SECRET);
@@ -26,9 +26,9 @@ exports.verifyToken = async (req, res, next) => {
 }
 
 exports.isModerator = async(req, res, next) => {
-
+    console.log(req.userId)
     const user = await User.findById(req.userId);
-    const roles = await Role.find({_id: {$in: user.roles}});
+    const roles = await Role.find({_id:{$in: user.roles}});
 
     for(let i= 0; i < roles.length; i++) {
         if(roles[i].name === 'moderator'){
@@ -42,7 +42,7 @@ exports.isModerator = async(req, res, next) => {
 exports.isAdmin = async(req, res, next) => {
 
     const user = await User.findById(req.userId);
-    const roles = await Role.find({_id: {$in: user.roles}});
+    const roles = await Role.find();
 
     for(let i= 0; i < roles.length; i++) {
         if(roles[i].name === 'admin'){

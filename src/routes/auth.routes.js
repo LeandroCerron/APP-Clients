@@ -1,9 +1,9 @@
 import { Router } from 'express';
 const router = Router();
 import * as authControllers from '../controllers/authController';
-import { verifySignup } from '../middlewares';
+import { verifySignup, authjwt } from '../middlewares';
 
-router.post('/signup', [ verifySignup.checkDuplicateUser, verifySignup.checkRolesExisted ], authControllers.singup);
+router.post('/signup', [authjwt.verifyToken ,authjwt.isModerator, authjwt.isAdmin, verifySignup.checkDuplicateUser, verifySignup.checkRolesExisted ], authControllers.singup);
 
 router.post('/login', authControllers.login);
 
